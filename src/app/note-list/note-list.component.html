@@ -1,0 +1,26 @@
+<mat-chip-listbox aria-label="sortOrder">
+  <mat-chip-option (click)="chipSelection('Titel')">Titel</mat-chip-option>
+  <mat-chip-option (click)="chipSelection('Thema')">Thema</mat-chip-option>
+  <mat-chip-option (click)="chipSelection('Änderungsdatum')">Änderungsdatum</mat-chip-option>
+</mat-chip-listbox>
+
+<div *ngIf="this.sortOrder">
+  <mat-list role="list">
+    <ng-container *ngFor="let note of notes">
+      <div matListItemTitle>{{note.title}} ({{note.theme?.description}})</div>
+      <div matListItemLine>Von: {{note.user?.username}}</div>
+      <ng-container *ngIf="note.modificationDate!=0; else noModificationDate">
+        <div matListItemLine>Erstellt: {{note.creationDate | date:'dd.MM.yyyy HH:mm:ss'}} Geändert: {{note.modificationDate}}</div>
+      </ng-container>
+      <ng-template #noModificationDate>
+        <div matListItemLine>Erstellt: {{note.creationDate | date:'dd.MM.yyyy HH:mm:ss'}} Geändert: Nicht definiert</div>
+      </ng-template>
+      <div matListItemLine>{{note.text}}</div>
+      <mat-divider></mat-divider>
+    </ng-container>
+  </mat-list>
+</div>
+
+<button mat-mini-fab color="accent" type="button" routerLink="/form">
+  <mat-icon>add</mat-icon>
+</button>
