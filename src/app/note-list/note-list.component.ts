@@ -30,6 +30,8 @@ export class NoteListComponent implements OnInit {
   }
 
   async loadNotes(): Promise<void> {
-    this.notes = await this.dbs.getNotesByTheme();
+    this.allNotes = await this.dbs.getNotesByTheme();
+    console.log(this.allNotes);
+    this.notes = this.allNotes.slice();
   }
 }

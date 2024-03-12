@@ -1,1 +1,31 @@
-<p>form works!</p>
+<form fxLayout="column" [formGroup]="form" (ngSubmit)= "add()" autocomplete="off">
+  <mat-form-field fxFlex>
+    <mat-label>Titel</mat-label>
+    <input matInput formControlName="title" type="text">
+    <mat-error>Der Titel muss eingegeben werden</mat-error>
+  </mat-form-field>
+  <div fxFlex>
+    <mat-form-field fxFlex>
+      <mat-label>Thema</mat-label>
+      <mat-select formControlName="theme">
+        <mat-option *ngFor="let theme of themes" [value]="theme.id">{{theme.description}}</mat-option>
+      </mat-select>
+      <mat-error>Das Thema muss ausgewählt werden</mat-error>
+    </mat-form-field>
+    <button mat-mini-fab color="accent" type="button">
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+  <span>Erstellt: {{date | date:'dd.MM.yyyy HH:mm:ss'}} Geändert: Nicht definiert</span>
+  <mat-form-field>
+    <mat-label>Text</mat-label>
+    <textarea matInput formControlName="text" cdkTextareaAutosize cdkAutosizeMinRows="15"></textarea>
+    <mat-error>Der Text muss eingegeben werden</mat-error>
+  </mat-form-field>
+  <div fxLayout="row" fxLayoutGap="5px">
+    <button mat-raised-button *ngIf="!editBoolean" type="submit" [disabled]="!form.valid">Hinzufügen</button>
+    <button mat-raised-button *ngIf="editBoolean" type="button" [disabled]="!form.valid">Ändern</button>
+    <button mat-raised-button type="button" (click)="backToList()">Zurück</button>
+    <button mat-button *ngIf="editBoolean" type="button" (click)="delete()"><mat-icon>delete</mat-icon></button>
+  </div>
+</form>

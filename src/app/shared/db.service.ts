@@ -61,6 +61,14 @@ export class DbService extends Dexie {
       .equals(description)
       .sortBy('title');
   }
+  async getNote(id: string) {
+    const notes = await this.notes
+      .where('id')
+      .equals(id)
+      .toArray();
+
+      return notes[0];
+  }
   async addTheme(theme: Theme) {
     return this.themes.add(theme);
   }
@@ -83,5 +91,19 @@ export class DbService extends Dexie {
     note.creationDate = moment().valueOf();
     note.modificationDate = 0;
     return this.notes.add(note);
+  }
+  async updateNote(note: Note) {
+    await this.notes.update(note.id, note);
+    return this.notes
+      .where('note.id')
+      .equals(note.id)
+      .modify({
+        'note.text': note.text,
+        modificationDate: moment().valueOf()
+      });
+  }
+  async deleteNote(note: Note): Promise<void> {
+    await this.notes.delete(note.id);
+    console.log(this.getNote(note.id));
   }
 }

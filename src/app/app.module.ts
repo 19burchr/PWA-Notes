@@ -18,6 +18,10 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { ReactiveFormsModule } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [
@@ -45,9 +49,15 @@ import { MatInputModule } from '@angular/material/input';
     MatChipsModule,
     MatSnackBarModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    FlexLayoutModule
   ],
-  providers: [],
+  providers: [{
+    provide: ErrorStateMatcher,
+    useClass: ShowOnDirtyErrorStateMatcher
+  }],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

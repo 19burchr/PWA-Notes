@@ -8,7 +8,8 @@ const routes: Routes = [
   { path: '', component: NoteListComponent, pathMatch: 'full' },
   { path: 'noteList', component: NoteListComponent },
   { path: 'themeList', component: ThemeListComponent },
-  { path: 'form', component: FormComponent }
+  { path: 'form', component: FormComponent },
+  { path: 'editForm/:id', component: FormComponent },
 ];
 
 @NgModule({

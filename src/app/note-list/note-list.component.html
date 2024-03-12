@@ -7,15 +7,19 @@
 <div *ngIf="this.sortOrder">
   <mat-list role="list">
     <ng-container *ngFor="let note of notes">
-      <div matListItemTitle>{{note.title}} ({{note.theme?.description}})</div>
-      <div matListItemLine>Von: {{note.user?.username}}</div>
-      <ng-container *ngIf="note.modificationDate!=0; else noModificationDate">
-        <div matListItemLine>Erstellt: {{note.creationDate | date:'dd.MM.yyyy HH:mm:ss'}} Geändert: {{note.modificationDate}}</div>
-      </ng-container>
-      <ng-template #noModificationDate>
-        <div matListItemLine>Erstellt: {{note.creationDate | date:'dd.MM.yyyy HH:mm:ss'}} Geändert: Nicht definiert</div>
-      </ng-template>
-      <div matListItemLine>{{note.text}}</div>
+      <a matListItem [routerLink]="['/editForm', note.id]">
+        <div matListItemTitle>{{note.title}} ({{note.theme?.description}})</div>
+        <div matListItemLine>Von: {{note.user?.username}}</div>
+        <ng-container *ngIf="note.modificationDate!=0; else noModificationDate">
+          <div matListItemLine>Erstellt: {{note.creationDate | date:'dd.MM.yyyy HH:mm:ss'}} Geändert:
+            {{note.modificationDate}}</div>
+        </ng-container>
+        <ng-template #noModificationDate>
+          <div matListItemLine>Erstellt: {{note.creationDate | date:'dd.MM.yyyy HH:mm:ss'}} Geändert: Nicht definiert
+          </div>
+        </ng-template>
+        <div matListItemLine>{{note.text}}</div>
+      </a>
       <mat-divider></mat-divider>
     </ng-container>
   </mat-list>
