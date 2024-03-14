@@ -1,0 +1,13 @@
+<p mat-dialog-title>Thema hinzufügen</p>
+<mat-dialog-content>
+  <mat-form-field fxFlex>
+    <mat-label>Beschreibung</mat-label>
+    <input fxFlex matInput>
+    <mat-icon matSuffix>search</mat-icon>
+    <mat-error>Diese Beschreibung existiert bereits.</mat-error>
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button fxFlex mat-raised-button [disabled]="descriptionExists">Hinzufügen</button>
+  <button fxFlex mat-raised-button mat-dialog-close>Zurück</button>
+</mat-dialog-actions>

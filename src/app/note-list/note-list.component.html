@@ -1,5 +1,5 @@
 <mat-chip-listbox aria-label="sortOrder">
-  <mat-chip-option (click)="chipSelection('Titel')">Titel</mat-chip-option>
+  <mat-chip-option (click)="chipSelection('Titel')" selected>Titel</mat-chip-option>
   <mat-chip-option (click)="chipSelection('Thema')">Thema</mat-chip-option>
   <mat-chip-option (click)="chipSelection('Änderungsdatum')">Änderungsdatum</mat-chip-option>
 </mat-chip-listbox>
@@ -7,7 +7,7 @@
 <div *ngIf="this.sortOrder">
   <mat-list role="list">
     <ng-container *ngFor="let note of notes">
-      <a matListItem [routerLink]="['/editForm', note.id]">
+      <div matListItem matRipple (click)="openForm(note.id)">
         <div matListItemTitle>{{note.title}} ({{note.theme?.description}})</div>
         <div matListItemLine>Von: {{note.user?.username}}</div>
         <ng-container *ngIf="note.modificationDate!=0; else noModificationDate">
@@ -19,7 +19,7 @@
           </div>
         </ng-template>
         <div matListItemLine>{{note.text}}</div>
-      </a>
+      </div>
       <mat-divider></mat-divider>
     </ng-container>
   </mat-list>

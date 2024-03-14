@@ -22,6 +22,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MatSelectModule } from '@angular/material/select';
 import { ErrorStateMatcher, ShowOnDirtyErrorStateMatcher } from '@angular/material/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatDialogModule } from '@angular/material/dialog';
+import { ThemeChangeDetailComponent } from './theme-change-detail/theme-change-detail.component';
+import { ThemeNewDetailComponent } from './theme-new-detail/theme-new-detail.component';
+import { MatRippleModule } from '@angular/material/core';
 
 @NgModule({
   declarations: [
@@ -29,7 +33,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     NavComponent,
     NoteListComponent,
     ThemeListComponent,
-    FormComponent
+    FormComponent,
+    ThemeChangeDetailComponent,
+    ThemeNewDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +58,9 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatInputModule,
     ReactiveFormsModule,
     MatSelectModule,
-    FlexLayoutModule
+    FlexLayoutModule,
+    MatDialogModule,
+    MatRippleModule
   ],
   providers: [{
     provide: ErrorStateMatcher,

@@ -10,7 +10,6 @@ import { User } from './user';
   providedIn: 'root'
 })
 export class DbService extends Dexie {
-
   private notes!: Dexie.Table<Note, string>;
   private themes!: Dexie.Table<Theme, string>;
   constructor() {
@@ -61,14 +60,6 @@ export class DbService extends Dexie {
       .equals(description)
       .sortBy('title');
   }
-  async getNote(id: string) {
-    const notes = await this.notes
-      .where('id')
-      .equals(id)
-      .toArray();
-
-      return notes[0];
-  }
   async addTheme(theme: Theme) {
     return this.themes.add(theme);
   }
@@ -88,6 +79,8 @@ export class DbService extends Dexie {
       });
   }
   async addNote(note: Note) {
+    console.log(this.notes)
+    console.log(note)
     note.creationDate = moment().valueOf();
     note.modificationDate = 0;
     return this.notes.add(note);
@@ -95,15 +88,25 @@ export class DbService extends Dexie {
   async updateNote(note: Note) {
     await this.notes.update(note.id, note);
     return this.notes
-      .where('note.id')
+      .where('id')
       .equals(note.id)
       .modify({
-        'note.text': note.text,
+        title: note.title,
+        theme: note.theme,
+        text: note.text,
         modificationDate: moment().valueOf()
       });
+}
+
+  async deleteNote(id: string) {
+    return this.notes.delete(id);
   }
-  async deleteNote(note: Note): Promise<void> {
-    await this.notes.delete(note.id);
-    console.log(this.getNote(note.id));
+  async getNote(id: string) {
+    const notes = await this.notes
+      .where('id')
+      .equals(id)
+      .toArray();
+
+    return notes[0];
   }
 }

@@ -5,6 +5,9 @@ import { DbService } from '../shared/db.service';
 import { Theme } from '../shared/theme';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialog } from '@angular/material/dialog';
+import { ThemeNewDetailComponent } from '../theme-new-detail/theme-new-detail.component';
+import { User } from '../shared/user';
 
 @Component({
   selector: 'no-form',
@@ -14,10 +17,11 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 export class FormComponent implements OnInit {
   form!: FormGroup;
   themes!: Array<Theme>;
-  date: Date = new Date();
+  creationDate!: number;
+  modificationDate!: number;
   editBoolean: boolean = false;
 
-  constructor(private fb: FormBuilder, private dbs: DbService, private router: Router, private route: ActivatedRoute, private snackBar: MatSnackBar) { this.createForm(Note.empty()); }
+  constructor(private fb: FormBuilder, private dbs: DbService, private router: Router, private route: ActivatedRoute, private snackBar: MatSnackBar, private dialog: MatDialog) { this.createForm(Note.empty()); }
 
   ngOnInit(): void {
     this.dbs.getThemesByDescription()
@@ -41,6 +45,8 @@ export class FormComponent implements OnInit {
   }
 
   createForm(note: Note) {
+    this.creationDate = note.creationDate;
+    this.modificationDate = note.modificationDate;
     this.form = this.fb.group({
       title: [note.title, {
         validators: Validators.required
@@ -61,7 +67,9 @@ export class FormComponent implements OnInit {
   async add() {
     const note: Note = Note.empty();
     Object.assign(note, this.form.value);
-    await this.dbs.addNote(note).then(result => result)
+    note.user = User.emptySepp();
+    await this.dbs.addNote(note)
+      .then(result => console.log('Erfolgreich hinzugefügt'))
       .catch(error => this.openSnackBar('Fehler beim Hinzufügen der Notiz'))
       .finally(() => this.form.reset(Note.empty()));
     this.backToList();
@@ -70,7 +78,8 @@ export class FormComponent implements OnInit {
   async edit() {
     const note: Note = Note.empty();
     Object.assign(note, this.form.value);
-    await this.dbs.updateNote(note).then(result => result)
+    await this.dbs.updateNote(note)
+      .then(result => console.log('Erfolgreich geändert'))
       .catch(error => this.openSnackBar('Fehler beim Ändern der Notiz'));
     this.createForm(note);
     this.backToList();
@@ -79,7 +88,7 @@ export class FormComponent implements OnInit {
   async delete() {
     const note: Note = Note.empty();
     Object.assign(note, this.form.value);
-    await this.dbs.deleteNote(note)
+    await this.dbs.deleteNote(note.id)
       .catch(error => this.openSnackBar('Fehler beim Löschen der Notiz'));
     this.form.reset(Note.empty());
     this.backToList();
@@ -88,6 +97,12 @@ export class FormComponent implements OnInit {
   private openSnackBar(msg: string) {
     this.snackBar.open(msg, 'OK', {
       duration: 5000,
+    });
+  }
+
+  openDialog(): void {
+    this.dialog.open(ThemeNewDetailComponent, {
+      position: { bottom: '15px' }
     });
   }
 }

@@ -1,1 +1,5 @@
-<p>theme-list works!</p>
+<mat-list role="list">
+  <ng-container *ngFor="let theme of themes">
+    <mat-list-item matRipple (click)="openDialog(theme)">{{theme.description}}</mat-list-item>
+  </ng-container>
+</mat-list>
