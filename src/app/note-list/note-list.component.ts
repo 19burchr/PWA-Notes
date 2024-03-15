@@ -20,8 +20,10 @@ export class NoteListComponent implements OnInit {
     this.loadNotes();
   }
 
-  private openSnackBar(message: string) {
-    this._snackBar.open(message);
+  private openSnackBar(msg: string) {
+    this._snackBar.open(msg, 'OK', {
+      duration: 5000,
+    });
   }
 
   async chipSelection(chip: string): Promise<void> {

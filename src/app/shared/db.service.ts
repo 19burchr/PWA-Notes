@@ -79,34 +79,18 @@ export class DbService extends Dexie {
       });
   }
   async addNote(note: Note) {
-    console.log(this.notes)
-    console.log(note)
     note.creationDate = moment().valueOf();
     note.modificationDate = 0;
     return this.notes.add(note);
   }
   async updateNote(note: Note) {
+    note.modificationDate = moment().valueOf();
     await this.notes.update(note.id, note);
-    return this.notes
-      .where('id')
-      .equals(note.id)
-      .modify({
-        title: note.title,
-        theme: note.theme,
-        text: note.text,
-        modificationDate: moment().valueOf()
-      });
-}
-
-  async deleteNote(id: string) {
-    return this.notes.delete(id);
+  }
+  async deleteNote(note: Note) {
+    return this.notes.delete(note.id);
   }
   async getNote(id: string) {
-    const notes = await this.notes
-      .where('id')
-      .equals(id)
-      .toArray();
-
-    return notes[0];
+    return this.notes.get(id);
   }
 }

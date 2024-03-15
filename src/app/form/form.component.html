@@ -4,11 +4,11 @@
     <input matInput formControlName="title" type="text">
     <mat-error>Der Titel muss eingegeben werden</mat-error>
   </mat-form-field>
-  <div fxFlex>
+  <div fxFlex formGroupName="theme">
     <mat-form-field fxFlex>
       <mat-label>Thema</mat-label>
-      <mat-select formControlName="theme">
-        <mat-option *ngFor="let theme of themes" [value]="theme.id">{{theme.description}}</mat-option>
+      <mat-select formControlName="description">
+        <mat-option *ngFor="let theme of themes" [value]="theme.description">{{theme.description}}</mat-option>
       </mat-select>
       <mat-error>Das Thema muss ausgewählt werden</mat-error>
     </mat-form-field>
@@ -31,7 +31,8 @@
   </mat-form-field>
   <div fxLayout="row" fxLayoutGap="5px">
     <button mat-raised-button *ngIf="!editBoolean" type="submit" [disabled]="!form.valid">Hinzufügen</button>
-    <button mat-raised-button *ngIf="editBoolean" type="button" [disabled]="!form.valid" (click)="edit()">Ändern</button>
+    <button mat-raised-button *ngIf="editBoolean" type="button" [disabled]="!form.valid"
+      (click)="edit()">Ändern</button>
     <button mat-raised-button type="button" (click)="backToList()">Zurück</button>
     <button mat-button *ngIf="editBoolean" type="button" (click)="delete()"><mat-icon>delete</mat-icon></button>
   </div>

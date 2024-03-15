@@ -8,6 +8,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
 import { ThemeNewDetailComponent } from '../theme-new-detail/theme-new-detail.component';
 import { User } from '../shared/user';
+import { v4 as uuidv4 } from 'uuid';
 
 @Component({
   selector: 'no-form',
@@ -19,21 +20,25 @@ export class FormComponent implements OnInit {
   themes!: Array<Theme>;
   creationDate!: number;
   modificationDate!: number;
+  note: Note = Note.empty();
   editBoolean: boolean = false;
 
   constructor(private fb: FormBuilder, private dbs: DbService, private router: Router, private route: ActivatedRoute, private snackBar: MatSnackBar, private dialog: MatDialog) { this.createForm(Note.empty()); }
 
   ngOnInit(): void {
-    this.dbs.getThemesByDescription()
-      .then(themes => this.themes = themes)
-
     this.route.params.subscribe(async params => {
       const id = params['id'];
+      console.log(id);
       if (id) {
         this.editBoolean = true;
         try {
-          const note = await this.dbs.getNote(id);
-          this.createForm(note);
+          const noteNew = await this.dbs.getNote(id);
+          console.log(noteNew);
+          if (noteNew) {
+            this.createForm(noteNew);
+          } else {
+            this.createForm(Note.empty())
+          }
         } catch (error) {
           this.openSnackBar('Fehler beim Laden des Artikels');
         }
@@ -45,20 +50,28 @@ export class FormComponent implements OnInit {
   }
 
   createForm(note: Note) {
+    this.dbs.getThemesByDescription()
+      .then(themes => this.themes = themes)
     this.creationDate = note.creationDate;
     this.modificationDate = note.modificationDate;
     this.form = this.fb.group({
       title: [note.title, {
         validators: Validators.required
       }],
-      theme: [note.theme?.id, {
-        validators: Validators.required
-      }],
+      theme: this.fb.group({
+        id: [uuidv4(), {
+          validators: Validators.required
+        }],
+        description: [note.theme?.description, {
+          validators: Validators.required
+        }]
+      }),
       text: [note.text, {
         validators: Validators.required
       }]
     });
   }
+
 
   backToList() {
     this.router.navigate(['/noteList']);
@@ -78,6 +91,7 @@ export class FormComponent implements OnInit {
   async edit() {
     const note: Note = Note.empty();
     Object.assign(note, this.form.value);
+    console.log(note.id);
     await this.dbs.updateNote(note)
       .then(result => console.log('Erfolgreich geändert'))
       .catch(error => this.openSnackBar('Fehler beim Ändern der Notiz'));
@@ -88,7 +102,8 @@ export class FormComponent implements OnInit {
   async delete() {
     const note: Note = Note.empty();
     Object.assign(note, this.form.value);
-    await this.dbs.deleteNote(note.id)
+    await this.dbs.deleteNote(note)
+    .then(result => console.log('Erfolgreich gelöscht'))
       .catch(error => this.openSnackBar('Fehler beim Löschen der Notiz'));
     this.form.reset(Note.empty());
     this.backToList();
